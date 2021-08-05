@@ -31,7 +31,8 @@ function durationBetweenDatesInYears(from, to) {
 }
 
 function isAccountStartedAfterBonusAge(accountDetails) {
-    return durationBetweenDatesInYears(accountDetails.getBirth(), accountDetails.getStartDate()) > BONUS_AGE;
+    return durationBetweenDatesInYears(accountDetails.getProps('birthDate'),
+        accountDetails.getProps('startDate')) > BONUS_AGE;
 }
 
 function durationSinceStartDateInYears(startDate) {
@@ -39,13 +40,13 @@ function durationSinceStartDateInYears(startDate) {
 }
 
 function calculateSeniorInterest(accountDetails) {
-    return accountDetails.getBalance()
-        * durationSinceStartDateInYears(accountDetails.getStartDate()) * SENIOR_PERCENT / 100;
+    return accountDetails.getProps('balance')
+        * durationSinceStartDateInYears(accountDetails.getProps('startDate')) * SENIOR_PERCENT / 100;
 }
 
 function calculateCommonInterest(accountDetails) {
-    return accountDetails.getBalance().doubleValue()
-        * durationSinceStartDateInYears(accountDetails.getStartDate()) * INTEREST_PERCENT / 100;
+    return accountDetails.getProps('balance').doubleValue()
+        * durationSinceStartDateInYears(accountDetails.getProps('startDate')) * INTEREST_PERCENT / 100;
 }
 
 function calculateInterest(accountDetails) {
@@ -53,7 +54,7 @@ function calculateInterest(accountDetails) {
         return 0;
     }
 
-    if (AGE <= accountDetails.getAge()) {
+    if (AGE <= accountDetails.getProps('age')) {
         return calculateSeniorInterest(accountDetails);
     } else {
         return calculateCommonInterest(accountDetails);

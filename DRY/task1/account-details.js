@@ -1,9 +1,9 @@
 module.exports = class AccountDetails {
-    constructor(birth, startDate, balance, age) {
-        this.birth = birth;
+    constructor(birthDate, startDate, balance) {
+        this.birthDate = birthDate;
         this.startDate = startDate;
         this.balance = balance;
-        this.age = age;
+        this.age = new Date().getFullYear() - new Date(birthDate).getFullYear();
     }
 
     getProps(props) {

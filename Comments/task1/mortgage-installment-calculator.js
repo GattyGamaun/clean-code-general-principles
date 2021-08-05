@@ -30,9 +30,7 @@ function getMonthlyRate(rate) {
     return rate / NUMBER_OF_MONTHS;
 }
 
-exports.calculateMonthlyPayment = function (principleAmount, yearMortgage, interestRate) {
-    getExceptionWhenNegativeValuesUsed(principleAmount, yearMortgage, interestRate);
-
+function getCalculatedPayment(principleAmount, yearMortgage, interestRate) {
     const decimalRate = convertInterestRateIntoDecimal(interestRate);
     const monthlyMortgage = convertYearMortgageToMonthlyMortgage(yearMortgage);
 
@@ -41,4 +39,10 @@ exports.calculateMonthlyPayment = function (principleAmount, yearMortgage, inter
     }
 
     return getMonthlyPayment(principleAmount, getMonthlyRate(decimalRate), monthlyMortgage);
+}
+
+exports.calculateMonthlyPayment = function (principleAmount, yearMortgage, interestRate) {
+    getExceptionWhenNegativeValuesUsed(principleAmount, yearMortgage, interestRate);
+
+    return getCalculatedPayment(principleAmount, yearMortgage, interestRate);
 }

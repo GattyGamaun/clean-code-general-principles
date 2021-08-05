@@ -1,3 +1,5 @@
+const UserDaoError = require('./errors/user-dao-error');
+
 module.exports = class UserReportController {
     constructor() {
         this.userReportBuilder = null;
@@ -17,7 +19,7 @@ module.exports = class UserReportController {
         try {
             return `User Total: ${this.userReportBuilder.getUserTotalOrderAmount(userId)}$`;
         } catch (e) {
-            if (e.message === 'ERROR: DB is not connected')
+            if (e instanceof UserDaoError)
                 throw new Error('technicalError')
 
             return e.message;
