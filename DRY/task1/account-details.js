@@ -6,35 +6,18 @@ module.exports = class AccountDetails {
         this.age = age;
     }
 
-    getBirth() {
-        return this.birth;
+    getProps(props) {
+        return this[props];
     }
 
-    setBirth(birth) {
-        this.birth = birth;
+    getAllProps() {
+        return Object.keys(this);
     }
 
-    getStartDate() {
-        return this.startDate;
-    }
-
-    setStartDate(startDate) {
-        this.startDate = startDate;
-    }
-
-    getBalance() {
-        return this.balance;
-    }
-
-    setBalance(balance) {
-        this.balance = balance;
-    }
-
-    getAge() {
-        return this.age;
-    }
-
-    setAge(age) {
-        this.age = age;
+    setProps(props, value) {
+        if (this.getAllProps().includes(props)) {
+            this[props] = value;
+        }
     }
 };
+

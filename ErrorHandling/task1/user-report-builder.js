@@ -5,23 +5,23 @@ module.exports = class UserReportBuilder {
 
     getUserTotalOrderAmount(userId) {
         if (this.userDao === null)
-            return null;
+            throw new Error('ERROR: DB is not connected');
 
         const user = this.userDao.getUser(userId);
         if (user === null)
-            return -1;
+            throw new Error('WARNING: User ID doesn\'t exist.');
 
         const orders = user.getAllOrders();
 
         if (!orders.length)
-            return -2;
+            throw new Error('WARNING: User have no submitted orders.');
 
         let sum = 0;
         for (let order of orders) {
             if (order.isSubmitted()) {
                 const total = order.total();
                 if (total < 0)
-                    return -3;
+                    throw new Error('ERROR: Wrong order amount.');
                 sum += total;
             }
         }

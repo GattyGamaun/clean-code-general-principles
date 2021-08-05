@@ -4,29 +4,25 @@ module.exports = class UserReportController {
     }
 
     getUserTotalOrderAmountView(userId, model) {
-        const totalMessage = this.getUserTotalMessage(userId);
-        if (totalMessage === null)
-            return 'technicalError';
+        try {
+            model.addAttribute('userTotalMessage', this.getUserTotalMessage(userId));
 
-        model.addAttribute('userTotalMessage', totalMessage);
-
-        return 'userTotal';
+            return 'userTotal';
+        } catch (e) {
+            return e.message;
+        }
     }
 
     getUserTotalMessage(userId) {
-        const amount = this.userReportBuilder.getUserTotalOrderAmount(userId);
+        try {
+            return `User Total: ${this.userReportBuilder.getUserTotalOrderAmount(userId)}$`;
+        } catch (e) {
+            if (e.message === 'ERROR: DB is not connected')
+                throw new Error('technicalError')
 
-        if (amount == null)
-            return null;
+            return e.message;
+        }
 
-        if (amount === -1)
-            return 'WARNING: User ID doesn\'t exist.';
-        if (amount === -2)
-            return 'WARNING: User have no submitted orders.';
-        if (amount === -3)
-            return 'ERROR: Wrong order amount.';
-
-        return `User Total: ${amount}$`;
     }
 
     getUserReportBuilder() {
