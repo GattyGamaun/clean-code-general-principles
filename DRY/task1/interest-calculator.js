@@ -11,7 +11,9 @@ function correctDiffYear(from, to) {
     return getDiffYear(from, to) - 1;
 }
 
-function isCorrectDateChecked(end, start) {
+function isCorrectDateChecked(from, to) {
+    const end = new Date(to);
+    const start = new Date(from);
     return end.getMonth() < start.getMonth()
         || end.getMonth() === start.getMonth() && end.getDate() < start.getDate();
 }
@@ -43,19 +45,24 @@ function calculateSeniorInterest(accountDetails) {
 }
 
 function calculateCommonInterest(accountDetails) {
-    return accountDetails.getBalance().doubleValue()
+    return accountDetails.getBalance() * 2
         * durationSinceStartDateInYears(accountDetails.getStartDate()) * INTEREST_PERCENT / 100;
+}
+
+function getCalculatedInterest(accountDetails) {
+    if (AGE <= getDiffYear(accountDetails.getBirthDate())) {
+        return calculateSeniorInterest(accountDetails);
+    } else {
+        return calculateCommonInterest(accountDetails);
+    }
 }
 
 function calculateInterest(accountDetails) {
     if (isNotAccountStartedAfterBonusAge(accountDetails)) {
         return 0;
     }
-    if (AGE <= getDiffYear(accountDetails.getBirthDate())) {
-        return calculateSeniorInterest(accountDetails);
-    } else {
-        return calculateCommonInterest(accountDetails);
-    }
+
+    return getCalculatedInterest(accountDetails);
 }
 
 function isNotAccountStartedAfterBonusAge(accountDetails) {
