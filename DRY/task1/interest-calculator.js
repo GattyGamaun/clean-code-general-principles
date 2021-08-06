@@ -3,12 +3,12 @@ const INTEREST_PERCENT = 4.5;
 const SENIOR_PERCENT = 5.5;
 const BONUS_AGE = 13;
 
-function getDiffYear(end, start) {
-    return end.getFullYear() - start.getFullYear();
+function getDiffYear(from, to = Date.now()) {
+    return new Date(to).getFullYear() - new Date(from).getFullYear();
 }
 
-function correctDiffYear(end, start) {
-    return getDiffYear(end, start) - 1;
+function correctDiffYear(from, to) {
+    return getDiffYear(from, to) - 1;
 }
 
 function isCorrectDateChecked(end, start) {
@@ -16,11 +16,9 @@ function isCorrectDateChecked(end, start) {
         || end.getMonth() === start.getMonth() && end.getDate() < start.getDate();
 }
 
-function getDurationOfDates(from, to = Date.now()) {
-    const start = new Date(from);
-    const end = new Date(to);
+function getDurationOfDates(from, to) {
     if (isCorrectDateChecked(from, to)) {
-        return correctDiffYear(start, end);
+        return correctDiffYear(from, to);
     }
 
     return getDiffYear(from, to);
@@ -31,8 +29,8 @@ function durationBetweenDatesInYears(from, to) {
 }
 
 function isAccountStartedAfterBonusAge(accountDetails) {
-    return durationBetweenDatesInYears(accountDetails.getProps('birthDate'),
-        accountDetails.getProps('startDate')) > BONUS_AGE;
+    return durationBetweenDatesInYears(accountDetails.getBirthDate(),
+        accountDetails.getStartDate()) > BONUS_AGE;
 }
 
 function durationSinceStartDateInYears(startDate) {
@@ -40,21 +38,20 @@ function durationSinceStartDateInYears(startDate) {
 }
 
 function calculateSeniorInterest(accountDetails) {
-    return accountDetails.getProps('balance')
-        * durationSinceStartDateInYears(accountDetails.getProps('startDate')) * SENIOR_PERCENT / 100;
+    return accountDetails.getBalance()
+        * durationSinceStartDateInYears(accountDetails.getStartDate()) * SENIOR_PERCENT / 100;
 }
 
 function calculateCommonInterest(accountDetails) {
-    return accountDetails.getProps('balance').doubleValue()
-        * durationSinceStartDateInYears(accountDetails.getProps('startDate')) * INTEREST_PERCENT / 100;
+    return accountDetails.getBalance().doubleValue()
+        * durationSinceStartDateInYears(accountDetails.getStartDate()) * INTEREST_PERCENT / 100;
 }
 
 function calculateInterest(accountDetails) {
     if (isNotAccountStartedAfterBonusAge(accountDetails)) {
         return 0;
     }
-
-    if (AGE <= accountDetails.getProps('age')) {
+    if (AGE <= getDiffYear(accountDetails.getBirthDate())) {
         return calculateSeniorInterest(accountDetails);
     } else {
         return calculateCommonInterest(accountDetails);

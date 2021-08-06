@@ -3,21 +3,30 @@ module.exports = class AccountDetails {
         this.birthDate = birthDate;
         this.startDate = startDate;
         this.balance = balance;
-        this.age = new Date().getFullYear() - new Date(birthDate).getFullYear();
     }
 
-    getProps(props) {
-        return this[props];
+    getBirthDate() {
+        return this.birthDate;
     }
 
-    getAllProps() {
-        return Object.keys(this);
+    setBirthDate(birthDate) {
+        this.birthDate = birthDate;
     }
 
-    setProps(props, value) {
-        if (this.getAllProps().includes(props)) {
-            this[props] = value;
-        }
+    getStartDate() {
+        return this.startDate;
+    }
+
+    setStartDate(startDate) {
+        this.startDate = startDate;
+    }
+
+    getBalance() {
+        return this.balance;
+    }
+
+    setBalance(balance) {
+        this.balance = balance;
     }
 };
 
